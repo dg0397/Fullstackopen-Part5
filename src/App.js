@@ -3,28 +3,32 @@ import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
+import "./App.css";
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
 
+  const [notification, setNotification] = useState(null);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [title,setTitle] = useState('')
-  const [author,setAuthor] = useState('')
-  const [url,setUrl] = useState('')
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
-  useEffect(()=>{
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
     }
-  },[])
+  }, []);
 
   const handleLogIn = async (e) => {
     e.preventDefault();
@@ -32,43 +36,58 @@ const App = () => {
     try {
       const user = await loginService.getLogin({ username, password });
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
-      blogService.setToken(user.token)
+      blogService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
     } catch (error) {
       console.log(error);
+      setNotification("Error: Wrong username or password");
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     }
   };
-  const handleLogOut = () =>{
-    window.localStorage.clear()
-    setUser(null)
-    setPassword('')
-    setUsername('')
-  }
-  const handleCreateNewBlog = async (e) =>{
-    e.preventDefault()
+  const handleLogOut = () => {
+    window.localStorage.clear();
+    setUser(null);
+    setPassword("");
+    setUsername("");
+  };
+  const handleCreateNewBlog = async (e) => {
+    e.preventDefault();
     const newBlog = {
       title,
       author,
-      url
-    }
+      url,
+    };
     try {
-      const blog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(blog))
-      setTitle('')
-      setUrl('')
-      setAuthor('')
+      const blog = await blogService.create(newBlog);
+      setBlogs(blogs.concat(blog));
+      setTitle("");
+      setUrl("");
+      setAuthor("");
+      setNotification(`Added new Blod: ${blog.title}`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     } catch (error) {
-      console.log(error) 
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div>
       {user === null ? (
         <>
           <h2>Log into the application</h2>
+          {notification && (
+            <div
+              className={notification.includes("Error") ? "error" : "success"}
+            >
+              {notification}
+            </div>
+          )}
           <form onSubmit={handleLogIn}>
             <div>
               <label>
@@ -98,13 +117,18 @@ const App = () => {
       ) : (
         <>
           <h1>Blogs</h1>
+          {notification && (
+            <div
+              className={notification.includes("Error") ? "error" : "success"}
+            >
+              {notification}
+            </div>
+          )}
           <h2>{user.username} Logged in</h2>
-          <button onClick = {handleLogOut}>
-            LogOut
-          </button>
+          <button onClick={handleLogOut}>LogOut</button>
           <h3>Create new</h3>
-          <form onSubmit = {handleCreateNewBlog}>
-          <div>
+          <form onSubmit={handleCreateNewBlog}>
+            <div>
               <label>
                 Title:
                 <input
@@ -115,7 +139,7 @@ const App = () => {
                 />
               </label>
             </div>
-          <div>
+            <div>
               <label>
                 Author:
                 <input
@@ -126,7 +150,7 @@ const App = () => {
                 />
               </label>
             </div>
-          <div>
+            <div>
               <label>
                 Url:
                 <input
@@ -137,9 +161,7 @@ const App = () => {
                 />
               </label>
             </div>
-            <button>
-              Create
-            </button>
+            <button>Create</button>
           </form>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
