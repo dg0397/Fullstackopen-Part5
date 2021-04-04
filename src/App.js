@@ -69,6 +69,20 @@ const App = () => {
     }
   };
 
+  const updateBlog = async(blog) => {
+    try{
+      const updatedBlog = await blogService.update(blog)
+      console.log(updatedBlog)
+      setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
+      setNotification(`Updated Blog: ${updatedBlog.title}`);
+      setTimeout(()=>{
+        setNotification(null)
+      }, 5000);
+    } catch(error){
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       {user === null ? (
@@ -123,7 +137,7 @@ const App = () => {
             <BlogForm createNewBlog={handleCreateNewBlog} />
           </Togglable>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateBlog = {updateBlog}/>
           ))}
         </>
       )}
