@@ -59,6 +59,7 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility()
       const newBlog = await blogService.create(blog);
+      console.log(newBlog)
       setBlogs(blogs.concat(newBlog));
       setNotification(`Added new Blod: ${newBlog.title}`);
       setTimeout(() => {
@@ -79,6 +80,19 @@ const App = () => {
         setNotification(null)
       }, 5000);
     } catch(error){
+      console.log(error)
+    }
+  }
+  const deleteBlog = async (blogToDelete) => {
+    console.log(blogToDelete)
+    try{
+      await blogService.deleteBlog(blogToDelete.id)
+      setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+      setNotification(`Deleted Blog: ${blogToDelete.title}`);
+      setTimeout(()=>{
+        setNotification(null)
+      }, 5000);
+    }catch(error){
       console.log(error)
     }
   }
@@ -136,7 +150,7 @@ const App = () => {
           <Togglable buttonLabel="Create New Blog"  ref = {blogFormRef}>
             <BlogForm createNewBlog={handleCreateNewBlog} />
           </Togglable>
-          <BlogList updateBlog = {updateBlog} blogs = {blogs}/>
+          <BlogList updateBlog = {updateBlog} blogs = {blogs} user = {user} deleteBlog = {deleteBlog}/>
         </>
       )}
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Blog from "./Blog";
 import ListByButtons from "./ListByButtons";
 
-const BlogList = ({ blogs, updateBlog }) => {
+const BlogList = ({ blogs, updateBlog, user,deleteBlog }) => {
   const [order, setOrder] = useState("Normal");
   let blogsToShow = [...blogs];
 
@@ -22,7 +22,7 @@ const BlogList = ({ blogs, updateBlog }) => {
     <div>
       <ListByButtons handleListSort={handleListSort} />
       {blogsToShow.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} user = {user} deleteBlog = {deleteBlog}/>
       ))}
     </div>
   );
