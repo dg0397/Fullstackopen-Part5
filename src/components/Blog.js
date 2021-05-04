@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import BlogDetails from './BlogDetails'
+
 const Blog = ({ blog,updateBlog,user, deleteBlog }) => {
   const [visible, setVisible] = useState(false)
 
@@ -25,22 +27,22 @@ const Blog = ({ blog,updateBlog,user, deleteBlog }) => {
     }
   }
 
-  const blogDetails = (
-    <>
-      <p>{blog.url}</p>
-      <p>likes {blog.likes} <button onClick = {handleLikeButton}>Like</button></p>
-      <p>{blog.user.name}</p>
-      {
-        user.username === blog.user.username && <button onClick = {handleRemove}>Remove</button>
-      }
-    </>
-  )
+  //const blogDetails = (
+  //  <>
+  //    <p>{blog.url}</p>
+  //    <p>likes {blog.likes} <button onClick = {handleLikeButton}>Like</button></p>
+  //    <p>{blog.user.name}</p>
+  //    {
+  //      user.username === blog.user.username && <button onClick = {handleRemove}>Remove</button>
+  //    }
+  //  </>
+  //)
 
   return (
     <div style = {blogStyle}>
       <h3>{blog.title} {blog.author} <button onClick = {handleClick}>{visible ? 'hide' : 'view'}</button> </h3>
       {
-        visible && blogDetails
+        visible && <BlogDetails blog = {blog} user = {user} handleLikeButton = {handleLikeButton} handleRemove = {handleRemove} />
       }
     </div>
   )
