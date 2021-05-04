@@ -96,3 +96,38 @@ describe('clicking the button, blog details is rendered',() => {
     expect(authorElement).toBeDefined()
   })
 })
+
+describe('blog buttons functionality ',()=>{
+  const mockHandleLike = jest.fn()
+  let component
+
+  const blog = {
+    'author': 'dg0397',
+    'likes': 35,
+    'title': 'Learning GraphQL',
+    'url': 'leargrapgql.com',
+    'user': {
+      'username': 'dg0397',
+      'name': 'Dionisio',
+      'id': '6058e0392a3fc348a4bf8586'
+    },
+    'id': '605b74bcf0e9ae4a709879db'
+  }
+
+  beforeEach(() => {
+    component = render(
+      <Blog blog = {blog}  user = {blog.user} updateBlog = {mockHandleLike} />
+    )
+
+    const button = component.getByText('view')
+    fireEvent.click(button)
+  })
+
+  test('like button',() => {
+    const button = component.getByText('Like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(mockHandleLike.mock.calls).toHaveLength(2)
+  })
+})
