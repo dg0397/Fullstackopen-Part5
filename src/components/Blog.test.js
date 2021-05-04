@@ -1,7 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render,fireEvent } from '@testing-library/react'
-//import { prettyDOM } from '@testing-library/dom'
 import Blog from './Blog'
 
 describe('renders content by default',() => {
@@ -23,8 +22,6 @@ describe('renders content by default',() => {
     },
     'id': '605b74bcf0e9ae4a709879db'
   }
-  //const mockupdateBlog = jest.fn()
-  //const mockdeleteBlog = jest.fn()
 
   test('renders title',() => {
     //check if title is visible
@@ -41,21 +38,12 @@ describe('renders content by default',() => {
     expect(component.container).not.toHaveTextContent(blog.url)
     //check if number of likes is not visible
     expect(component.container).not.toHaveTextContent(blog.likes)
-    //component.debug()
   })
 
   test('blogDetails is not render by default',() => {
     const blogDetailsToStart = component.container.querySelector('.blogDetails')
     expect(blogDetailsToStart).toBe(null)
   })
-
-
-  //const button = component.getByText('view')
-  //fireEvent.click(button)
-  //console.log(prettyDOM(button))
-  //const blogDetailsToEnd = component.container.querySelector('.blogDetails')
-  //expect(blogDetailsToEnd).toBeDefined
-  //component.debug()
 })
 
 describe('clicking the button, blog details is rendered',() => {
@@ -97,7 +85,7 @@ describe('clicking the button, blog details is rendered',() => {
   })
 })
 
-describe('blog buttons functionality ',()=>{
+describe('blog buttons functionality ',() => {
   const mockHandleLike = jest.fn()
   let component
 
