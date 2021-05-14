@@ -7,15 +7,13 @@ import BlogForm from './components/BlogForm'
 
 import './App.css'
 import BlogList from './components/BlogList'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const [notification, setNotification] = useState(null)
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
 
   const blogFormRef = useRef()
 
@@ -31,16 +29,12 @@ const App = () => {
     }
   }, [])
 
-  const handleLogIn = async (e) => {
-    e.preventDefault()
-    console.log('loggin with', username, password)
+  const handleLogIn = async (userData) => {
     try {
-      const user = await loginService.getLogin({ username, password })
+      const user = await loginService.getLogin(userData)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (error) {
       console.log(error)
       setNotification('Error: Wrong username or password')
@@ -52,8 +46,6 @@ const App = () => {
   const handleLogOut = () => {
     window.localStorage.clear()
     setUser(null)
-    setPassword('')
-    setUsername('')
   }
   const handleCreateNewBlog = async (blog) => {
     try {
@@ -100,41 +92,7 @@ const App = () => {
   return (
     <div>
       {user === null ? (
-        <>
-          <h2>Log into the application</h2>
-          {notification && (
-            <div
-              className={notification.includes('Error') ? 'error' : 'success'}
-            >
-              {notification}
-            </div>
-          )}
-          <form onSubmit={handleLogIn}>
-            <div>
-              <label>
-                Username:
-                <input
-                  value={username}
-                  type="text"
-                  name="Username"
-                  onChange={({ target }) => setUsername(target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Password:
-                <input
-                  value={password}
-                  type="password"
-                  name="Password"
-                  onChange={({ target }) => setPassword(target.value)}
-                />
-              </label>
-            </div>
-            <button type="submit">Login</button>
-          </form>
-        </>
+        <LoginForm notification = {notification} handleLogIn = {handleLogIn} />
       ) : (
         <>
           <h1>Blogs</h1>
