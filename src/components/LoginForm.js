@@ -21,6 +21,7 @@ const LoginForm = ({ notification, handleLogIn }) => {
           <label>
                 Username:
             <input
+              id = 'username'
               value={username}
               type="text"
               name="Username"
@@ -32,6 +33,7 @@ const LoginForm = ({ notification, handleLogIn }) => {
           <label>
                 Password:
             <input
+              id = 'password'
               value={password}
               type="password"
               name="Password"
@@ -39,7 +41,7 @@ const LoginForm = ({ notification, handleLogIn }) => {
             />
           </label>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" id = 'login-btn' >Login</button>
       </form>
     </div>
   )

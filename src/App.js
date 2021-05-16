@@ -32,6 +32,10 @@ const App = () => {
   const handleLogIn = async (userData) => {
     try {
       const user = await loginService.getLogin(userData)
+      setNotification(`Welcome ${user.name}`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
