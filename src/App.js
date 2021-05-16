@@ -26,6 +26,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -55,9 +56,8 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility()
       const newBlog = await blogService.create(blog)
-      console.log(newBlog)
       setBlogs(blogs.concat(newBlog))
-      setNotification(`Added new Blod: ${newBlog.title}`)
+      setNotification(`Added new Blog: ${newBlog.title}`)
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -69,7 +69,6 @@ const App = () => {
   const updateBlog = async(blog) => {
     try{
       const updatedBlog = await blogService.update(blog)
-      console.log(updatedBlog)
       setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
       setNotification(`Updated Blog: ${updatedBlog.title}`)
       setTimeout(() => {
@@ -80,7 +79,6 @@ const App = () => {
     }
   }
   const deleteBlog = async (blogToDelete) => {
-    console.log(blogToDelete)
     try{
       await blogService.deleteBlog(blogToDelete.id)
       setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
@@ -92,7 +90,6 @@ const App = () => {
       console.log(error)
     }
   }
-  console.log(blogs)
   return (
     <div>
       {user === null ? (

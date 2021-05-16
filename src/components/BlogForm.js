@@ -12,7 +12,7 @@ const BlogForm = ({ createNewBlog }) => {
     createNewBlog({
       title,
       author,
-      url,
+      url
     })
     setTitle('')
     setAuthor('')
@@ -59,7 +59,7 @@ const BlogForm = ({ createNewBlog }) => {
             />
           </label>
         </div>
-        <button type="submit" >Create</button>
+        <button id="new-blog-btn" type="submit" >Create</button>
       </form>
     </div>
   )
