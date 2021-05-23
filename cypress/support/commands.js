@@ -44,3 +44,9 @@ Cypress.Commands.add('createBlog', ({ author, title, url }) => {
 
   cy.visit('http://localhost:3000')
 })
+
+Cypress.Commands.add('logout', () => {
+  cy.get('#logout').click()
+
+  cy.visit('http://localhost:3000')
+})

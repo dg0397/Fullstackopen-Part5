@@ -68,14 +68,25 @@ describe('Blog app', function() {
           author: 'dgMaster',
           url: 'anothercypressblog1.com'
         })
+
+        cy.logout()
+
+        const user2 = {
+          'username': 'rootMaster',
+          'name': 'root',
+          'password': '123456789'
+        }
+        cy.request('POST','http://localhost:3003/api/users',user2)
+        cy.login({ username:'rootMaster',password:'123456789' })
+
         cy.createBlog({
           title: 'Another blog created by cypress 2.0',
-          author: 'dgMaster',
+          author: 'rootMaster',
           url: 'anothercypressblog2.com'
         })
         cy.createBlog({
           title: 'Another blog created by cypress 3.0',
-          author: 'dgMaster',
+          author: 'rooMaster',
           url: 'anothercypressblog3.com'
         })
       })
@@ -92,6 +103,33 @@ describe('Blog app', function() {
           .should('contain', 'Updated Blog: Another blog created by cypress 2.0')
           .and('have.css', 'color', 'rgb(0, 128, 0)')
           .and('have.css', 'border-color' , 'rgb(0, 128, 0)')
+      })
+
+      describe('delete an existing blog',function(){
+        it('success with user who created the blog',function(){
+          cy.contains('Another blog created by cypress 3.0')
+            .contains('view')
+            .click()
+
+          cy.get('#remove-btn').click()
+
+          cy.get('.success')
+            .should('contain', 'Deleted Blog: Another blog created by cypress 3.0')
+            .and('have.css', 'color', 'rgb(0, 128, 0)')
+            .and('have.css', 'border-color' , 'rgb(0, 128, 0)')
+
+          cy.get('h3').should('not.contain','Another blog created by cypress 3.0')
+
+        })
+        it('user cannot delete the blog',function(){
+          cy.contains('Another blog created by cypress 1.0')
+            .contains('view')
+            .click()
+
+          cy.contains('Another blog created by cypress 1.0')
+            .parent()
+            .should('not.contain','Remove')
+        })
       })
     })
   })
