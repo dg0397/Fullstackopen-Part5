@@ -60,5 +60,39 @@ describe('Blog app', function() {
 
       cy.get('h3').should('contain','A blog created by cypress')
     })
+
+    describe('and a blog exists', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'Another blog created by cypress 1.0',
+          author: 'dgMaster',
+          url: 'anothercypressblog1.com'
+        })
+        cy.createBlog({
+          title: 'Another blog created by cypress 2.0',
+          author: 'dgMaster',
+          url: 'anothercypressblog2.com'
+        })
+        cy.createBlog({
+          title: 'Another blog created by cypress 3.0',
+          author: 'dgMaster',
+          url: 'anothercypressblog3.com'
+        })
+      })
+
+      it('it can be liked', function () {
+        cy.contains('Another blog created by cypress 2.0')
+          .contains('view')
+          .click()
+
+        cy.get('#like-btn').click()
+        cy.contains('likes 1')
+
+        cy.get('.success')
+          .should('contain', 'Updated Blog: Another blog created by cypress 2.0')
+          .and('have.css', 'color', 'rgb(0, 128, 0)')
+          .and('have.css', 'border-color' , 'rgb(0, 128, 0)')
+      })
+    })
   })
 })
