@@ -93,11 +93,19 @@ describe('Blog app', function() {
 
       it('it can be liked', function () {
         cy.contains('Another blog created by cypress 2.0')
-          .contains('view')
+          .parent()
+          .as('theBlog')
+
+        cy.get('@theBlog')
+          .find('button')
           .click()
 
-        cy.get('#like-btn').click()
-        cy.contains('likes 1')
+        cy.get('@theBlog')
+          .find('#like-btn')
+          .click()
+
+        cy.get('@theBlog')
+          .should('contain','likes 1')
 
         cy.get('.success')
           .should('contain', 'Updated Blog: Another blog created by cypress 2.0')
@@ -129,6 +137,47 @@ describe('Blog app', function() {
           cy.contains('Another blog created by cypress 1.0')
             .parent()
             .should('not.contain','Remove')
+        })
+      })
+      describe('check the order of blogs',function(){
+        beforeEach(function(){
+          cy.contains('Another blog created by cypress 2.0')
+            .parent()
+            .as('theBlog2')
+
+          cy.get('@theBlog2')
+            .find('button')
+            .click()
+
+          cy.get('@theBlog2')
+            .find('#like-btn')
+            .click()
+            .then((result) => {
+              cy.wait(1000)
+              cy.wrap(result[0]).click()
+            })
+
+          cy.wait(1500)
+          cy.contains('Another blog created by cypress 1.0')
+            .parent()
+            .as('theBlog1')
+
+          cy.get('@theBlog1')
+            .find('button')
+            .click()
+
+          cy.get('@theBlog1')
+            .find('#like-btn')
+            .click()
+
+        })
+        it.only('the blog with the most likes being first',function(){
+          cy.wait(1000)
+          cy.get('#order-up').click()
+          cy.get('.blog')
+            .then(blogs => {
+              cy.wrap(blogs[0]).should('contain','likes 2')
+            })
         })
       })
     })

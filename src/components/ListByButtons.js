@@ -5,7 +5,7 @@ const ListByButtons = ({ handleListSort }) => {
   return (
     <div>
       <h3>List By Likes:</h3>
-      <button onClick={handleListSort}>↑</button>
+      <button onClick={handleListSort} id = "order-up">↑</button>
       <button onClick={handleListSort}>Normal</button>
       <button onClick={handleListSort}>↓</button>
     </div>

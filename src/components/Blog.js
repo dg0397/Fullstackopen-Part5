@@ -39,7 +39,7 @@ const Blog = ({ blog,updateBlog,user, deleteBlog }) => {
   //)
 
   return (
-    <div style = {blogStyle}>
+    <div style = {blogStyle} className = 'blog'>
       <h3>{blog.title} {blog.author} <button onClick = {handleClick}>{visible ? 'hide' : 'view'}</button> </h3>
       {
         visible && <BlogDetails blog = {blog} user = {user} handleLikeButton = {handleLikeButton} handleRemove = {handleRemove} />
